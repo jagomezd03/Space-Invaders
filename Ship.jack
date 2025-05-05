@@ -1,0 +1,63 @@
+class Ship{
+    field int x,y;
+    field int size;
+
+    constructor Ship new (int sX, int sY, int sSize){       //Method to create the ship
+        let x = sX;
+        let y = sY;
+        let size = sSize;
+        do draw();
+        return this;
+    }
+    method void dispose(){                                  //Base method to dispose memory
+        do Memory.deAlloc(this);
+        return;
+    }
+    method void drawShip(){                                 //Method to draw the ship
+        do Screen.setColor(true);                           //We assign black to the color so can draw
+        do Screen.drawRectangle(x, y, x + size, y + size);  //Draw the ship with its caracteristics
+        return;
+    }
+    method void eraseShip(){                                //Method to erase the ship
+        do Screen.setColor(false);                          //We assign white to the color so we can erase
+        do Screen.drawRectangle(x, y, x + size, y + size);  //We erase the ship using the same logic used on drawing it
+        return;
+    }
+    method void shoot(){                                    //Method used for the shots of the ship TEMPORAL:
+        if (((y + size)<254) & ((x + size)<510)){           //TEMPORAL: Increase size
+            do erase();
+            let size = size + 2;
+            do draw();
+        }
+        return;
+    }
+    method void shield(){
+        if (size > 2){
+            do erase;
+            let size = size - 2;
+            do draw();
+        }
+    }
+    method void moveUp(){
+        if (y>1){
+            do Screen.setColor(false);
+            do Screen.drawRectangle(x, (y + size) - 1, x + size, y + size)
+            let y = y -2;
+            do Screen.setColor(true);
+            do Screen.drawRectangle(x, y, x + size, y + 1);
+        }
+        return;
+    }
+    method void moveDown(){
+        if (y<255){
+            do Screen.setColor(false);
+            do Screen.drawRectangle(x, (y + size) - 1, x + size, y + size)
+            let y = y -2;
+            do Screen.setColor(true);
+            do Screen.drawRectangle(x, y, x + size, y + 1);
+        }
+        return;
+    }
+    method void moveLeft()
+    method void moveRight()
+}
