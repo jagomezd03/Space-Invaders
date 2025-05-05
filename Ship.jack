@@ -23,41 +23,59 @@ class Ship{
         do Screen.drawRectangle(x, y, x + size, y + size);  //We erase the ship using the same logic used on drawing it
         return;
     }
-    method void shoot(){                                    //Method used for the shots of the ship TEMPORAL:
+    method void shoot(){                                    //Method used for the shots of the ship TEMPORAL:Increase size method
         if (((y + size)<254) & ((x + size)<510)){           //TEMPORAL: Increase size
-            do erase();
+            do eraseShip();                                     //First we erase
             let size = size + 2;
-            do draw();
+            do drawShip();                                      //Then we draw
         }
         return;
     }
-    method void shield(){
-        if (size > 2){
-            do erase;
+    method void shield(){                                   //Shield for the ship method
+        if (size > 2){                                      //TEMPORAL: Decrease size
+            do eraseShip();                                 //First we erase
             let size = size - 2;
-            do draw();
+            do drawShip();                                  //Then we draw
         }
     }
-    method void moveUp(){
+    method void moveUp(){                                   //Method used to managed input from the user using upArrow
         if (y>1){
             do Screen.setColor(false);
             do Screen.drawRectangle(x, (y + size) - 1, x + size, y + size)
-            let y = y -2;
+            let y = y - 2;
             do Screen.setColor(true);
             do Screen.drawRectangle(x, y, x + size, y + 1);
         }
         return;
     }
-    method void moveDown(){
+    method void moveDown(){                                 //Method used to managed input from the user using downArrow
         if (y<255){
             do Screen.setColor(false);
-            do Screen.drawRectangle(x, (y + size) - 1, x + size, y + size)
-            let y = y -2;
+            do Screen.drawRectangle(x, (y - size) + 1, x + size, y + size)
+            let y = y + 2;
             do Screen.setColor(true);
-            do Screen.drawRectangle(x, y, x + size, y + 1);
+            do Screen.drawRectangle(x, y, x + size, y - 1);
         }
         return;
     }
-    method void moveLeft()
-    method void moveRight()
+    method void moveLeft(){                                 //Method used to managed input from the user using leftArrow
+        if (y>1){
+            do Screen.setColor(false);
+            do Screen.drawRectangle((x - size) - 1, y , x + size, y + size)
+            let x = x -2;
+            do Screen.setColor(true);
+            do Screen.drawRectangle(x, y, x + 1, y + size);
+        }
+        return;
+    }
+    method void moveRight(){                                //Method used to managed input from the user using rightArrow
+        if (y<255){
+            do Screen.setColor(false);
+            do Screen.drawRectangle((x - size) + 1, y , x + size, y + size)
+            let x = x + 2;
+            do Screen.setColor(true);
+            do Screen.drawRectangle(x, y, x - 1, y + size);
+        }
+        return;
+    }
 }
