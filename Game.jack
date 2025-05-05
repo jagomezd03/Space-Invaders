@@ -8,4 +8,45 @@ class Game{
         return this;
     }
 
+    method void dispose(){
+        do square.dispose();
+        do Memory.deAlloc();
+        return;
+    }
+
+    method void moveShip(){                     //Method used for the directions of the sip received by input
+        if (direction = 1){ do square.moveUp(); }
+        if (direction = 2){ do square.moveDown(); }
+        if (direction = 3){ do square.moveLeft(); }
+        if (direction = 4){ do square.moveRight(); }
+
+        do Sys.wait(5);
+        return;
+    }
+
+    method void run(){                          //Principal method that allows us to run the program
+        var char key;
+        var boolean exit;                       //This will helps us to quit the game if the user wants to
+        let exit = false;
+
+        while(~exit){
+            while (key = 0){
+                let key = Keyboard.keyPressed();
+                do moveShip();
+            }
+            if (key = 81) { let exit = true; }              //Q Key for quitting the game
+            if (key = 67) { do square.shield(); }           //C Key for shield
+            if (key = 66) { do square.shoot(); }            //B Key for shoot
+            if (key = 131) { let direction = 1; }
+            if (key = 133) { let direction = 2; }
+            if (key = 130) { let direction = 3; }
+            if (key = 132) { let direction = 4; }
+
+            while (~(key = 0)){
+                let key = Keyboard.keyPressed();
+                do moveShip();
+            }
+        }
+        return;
+    }
 }
