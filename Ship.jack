@@ -2,10 +2,9 @@ class Ship{
     field int x,y;
     field int size;
 
-    constructor Ship new (int sX, int sY, int sSize){       //Method to create the ship
+    constructor Ship new (int sX, int sY){       //Method to create the ship
         let x = sX;
         let y = sY;
-        let size = sSize;
         do drawShip();
         return this;
     }
@@ -13,49 +12,10 @@ class Ship{
         do Memory.deAlloc(this);
         return;
     }
-    method void drawShip(){                                     //Method to draw the ship
-        do Screen.setColor(false);                              //First we draw the white sections of the ship
-        do Screen.drawRectangle(x, y, x + 5, y + 6);            //First Section
-        do Screen.drawLine(x + 6, y, x + 6, y + 2);             //Second Section
-        do Screen.drawRectangle(x + 11, y, x + 16, y + 6);      //Third Section
-        do Screen.drawLine(x + 10, y, x + 10, y + 2);           //Section 4
-        do Screen.drawRectangle(x + 14, y + 7, x + 16, y + 8);  //Section 5
-        do Screen.drawRectangle(x, y + 7, x + 2, y + 8);        //Section 6
-        do Screen.drawLine(x + 8, y + 1, x + 8, y + 3);         //Section 7
-        do Screen.drawRectangle(x + 7, y + 4, x + 9, y + 10);   //Section 8
-        do Screen.drawLine(x + 4, y + 8, x + 4, y + 9);         //Section 9
-        do Screen.drawPixel(x + 6, y + 9);                      //Section 10
-        do Screen.drawPixel(x + 10, y + 9);                     //Section 11
-        do Screen.drawLine(x + 12, y + 8, x + 12, y + 9);       //Section 12
-        do Screen.drawPixel(x + 7, y + 11);                     //Section 13
-        do Screen.drawPixel(x + 9, y + 11);                     //Section 14
-        do Screen.drawPixel(x + 8, y + 13);                     //Section 15
-        do Screen.drawRectangle(x + 4, y + 10, x + 6, y + 16);  //Section 16
-        do Screen.drawPixel(x + 3, y + 12);                     //Section 17
-        do Screen.drawLine(x + 1, y + 10, x + 1, y + 12);       //Section 18
-        do Screen.drawRectangle(x + 1, y + 13, x + 3, y + 17);  //Section 19
-        do Screen.drawLine(x + 1, y + 18, x + 1, y + 19);       //Section 20
-        do Screen.drawPixel(x + 2, y + 18);                     //Section 21
-        do Screen.drawLine(x + 5, y + 17, x + 6, y + 17);       //Section 22
-        do Screen.drawRectangle(x + 7, y + 14, x + 9, y + 17);  //Section 23
-        do Screen.drawLine(x + 8, y + 18, x + 8, y + 20);       //Section 24
-        do Screen.drawLine(x + 10, y + 17, x + 11, y + 17);     //Section 25
-        do Screen.drawRectangle(x + 10, y + 10, x + 12, y + 16);//Section 26
-        do Screen.drawPixel(x + 13, x + 12);                    //Section 27
-        do Screen.drawLine(x + 15, y + 10, x + 15, y + 12);     //Section 28
-        do Screen.drawRectangle(x + 13, y + 13, x + 15, y + 17);//Section 29
-        do Screen.drawLine(x + 14, y + 18, x + 15, y + 18);     //Section 30
-        do Screen.drawPixel(x + 15, y + 19);                      //Section 31
-        do Screen.drawPixel(x + 4, y + 18);                     //Section 32
-        do Screen.drawPixel(x + 12, y + 18);                    //Section 33
-        do Screen.drawRectangle(x + 3, y + 19, x + 6, y + 22);  //Section 34
-        do Screen.drawRectangle(x, y + 21, x + 2, y + 22);      //Section 35
-        do Screen.drawRectangle(x + 10, y + 19, x + 13, y + 22);//Section 36
-        do Screen.drawRectangle(x + 14, y + 21, x + 16, y + 22);//Section 37
-        
-        do Screen.setColor(true);                               //Now we draw the black sections on the ship
-        do Screen.drawLine(x + 7, y, x + 7, y + 3);
-        do Screen.drawPixel(x + 8, y);
+    method void drawShip(){                                     //Method to draw the ship        
+        do Screen.setColor(true);                               //We select black so we are able to draw the ship
+        do Screen.drawLine(x + 7, y, x + 7, y + 3);             //We divided the model in sections so it will be easy
+        do Screen.drawPixel(x + 8, y);                          //U can found the model on the documentation
         do Screen.drawLine(x + 9, y, x + 9, y + 3);
         do Screen.drawLine(x + 6, y + 3, x + 6, y + 8);
         do Screen.drawLine(x + 10, y + 3, x + 10, y + 8);
@@ -90,16 +50,44 @@ class Ship{
         return;
     }
     method void eraseShip(){                                //Method to erase the ship
-        do Screen.setColor(false);                          //We assign white to the color so we can erase
-        do Screen.drawRectangle(x, y, x + size, y + size);  //We erase the ship using the same logic used on drawing it
+        do Screen.setColor(false);                          //We assign white to the color so we can erase                     
+        do Screen.drawLine(x + 7, y, x + 7, y + 3);         //So we just copy and paste the code of drawShip
+        do Screen.drawPixel(x + 8, y);                      //and just change the color to white
+        do Screen.drawLine(x + 9, y, x + 9, y + 3);
+        do Screen.drawLine(x + 6, y + 3, x + 6, y + 8);
+        do Screen.drawLine(x + 10, y + 3, x + 10, y + 8);
+        do Screen.drawLine(x + 3, y + 7, x + 5, y + 7);
+        do Screen.drawLine(x + 11, y + 7, x + 13, y + 7);
+        do Screen.drawLine(x + 5, y + 8, x + 5, y + 9);
+        do Screen.drawLine(x + 11, y + 8, x + 11, y + 9);
+        do Screen.drawLine(x + 3, y + 8, x + 3, y + 11);
+        do Screen.drawLine(x, y + 9, x + 2, y + 9);
+        do Screen.drawLine(x + 13, y + 8, x + 13, y + 11);
+        do Screen.drawLine(x + 14, y + 9, x + 16, y + 9);
+        do Screen.drawLine(x + 2, y + 10, x + 2, y + 12);
+        do Screen.drawLine(x + 14, y + 10, x + 14, y + 12);
+        do Screen.drawLine(x + 8, y + 11, x + 8, y + 12);
+        do Screen.drawLine(x + 7, y + 12, x + 7, y + 13);
+        do Screen.drawLine(x + 9, y + 12, x + 9, y + 13);
+        do Screen.drawLine(x, y + 10, x, y + 20);
+        do Screen.drawLine(x + 16, y + 10, x + 16, y + 20);
+        do Screen.drawLine(x + 1, y + 20, x + 2, y + 20);
+        do Screen.drawLine(x + 14, y + 20, x + 15, y + 20);
+        do Screen.drawLine(x + 5, y + 18, x + 7, y + 18);
+        do Screen.drawLine(x + 9, y + 18, x + 11, y + 18);
+        do Screen.drawLine(x + 7, y + 18, x + 7, y + 22);
+        do Screen.drawLine(x + 9, y + 18, x + 9, y + 22);
+        do Screen.drawLine(x + 8, y + 21, x + 8, y + 22);
+        do Screen.drawPixel(x + 2, y + 19);
+        do Screen.drawPixel(x + 3, y + 18);
+        do Screen.drawPixel(x + 4, y + 17);
+        do Screen.drawPixel(x + 12, y + 17);
+        do Screen.drawPixel(x + 13, y + 18);
+        do Screen.drawPixel(x + 14, y + 19);
         return;
     }
     method void shoot(){                                    //Method used for the shots of the ship TEMPORAL:Increase size method
-        if (((y + size)<254) & ((x + size)<510)){           //TEMPORAL: Increase size
-            do eraseShip();                                     //First we erase
-            let size = size + 2;
-            do drawShip();                                      //Then we draw
-        }
+        
         return;
     }
     method void shield(){                                   //Shield for the ship method
@@ -111,42 +99,34 @@ class Ship{
         return;
     }
     method void moveUp(){                                   //Method used to managed input from the user using upArrow
-        if (y>1){
-            do Screen.setColor(false);
-            do Screen.drawRectangle(x, (y + size) - 1, x + size, y + size);
+        if (y>207){
+            do eraseShip();
             let y = y - 2;
-            do Screen.setColor(true);
-            do Screen.drawRectangle(x, y, x + size, y + 1);
+            do drawShip();
         }
         return;
     }
     method void moveDown(){                                 //Method used to managed input from the user using downArrow
-        if (y<224){
-            do Screen.setColor(false);
-            do Screen.drawRectangle(x, y, x + size, y + 1);
+        if (y<233){
+            do eraseShip();
             let y = y + 2;
-            do Screen.setColor(true);
-            do Screen.drawRectangle(x, (y + size) - 1, x + size, y + size);
+            do drawShip();
         }
         return;
     }
     method void moveLeft(){                                 //Method used to managed input from the user using leftArrow
         if (x>1){
-            do Screen.setColor(false);
-            do Screen.drawRectangle((x + size) - 1, y , x + size, y + size);
+            do eraseShip();
             let x = x - 2;
-            do Screen.setColor(true);
-            do Screen.drawRectangle(x, y, x + 1, y + size);
+            do drawShip();
         }
         return;
     }
     method void moveRight(){                                //Method used to managed input from the user using rightArrow
-        if (x<480){
-            do Screen.setColor(false);
-            do Screen.drawRectangle(x, y, x + 1, y + size);
+        if (x<494){
+            do eraseShip();
             let x = x + 2;
-            do Screen.setColor(true);
-            do Screen.drawRectangle((x + size) - 1, y , x + size, y + size);
+            do drawShip();
         }
         return;
     }
