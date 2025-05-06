@@ -1,9 +1,9 @@
 class Game{
-    field Square square;
+    field Ship square;
     field int direction;    //Current direction is represented by 0=none, 1=up, 2=down, 3=left, 4=right
 
-    constructor Square new() {
-        let square = Square.new(0,0,30);        //Initial position of the ship
+    constructor Game new() {
+        let square = Ship.new(481,225,30);        //Initial position of the ship
         let direction = 0;                      //Stationary direction as init
         return this;
     }
