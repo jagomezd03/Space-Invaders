@@ -20,7 +20,7 @@ class Game{
         if (direction = 3){ do square.moveLeft(); }
         if (direction = 4){ do square.moveRight(); }
 
-        do Sys.wait(5);
+        do Sys.wait(50);
         return;
     }
 

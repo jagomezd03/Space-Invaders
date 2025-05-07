@@ -12,78 +12,50 @@ class Ship{
         do Memory.deAlloc(this);
         return;
     }
-    method void drawShip(){                                     //Method to draw the ship        
-        do Screen.setColor(true);                               //We select black so we are able to draw the ship
-        do Screen.drawLine(x + 7, y, x + 7, y + 3);             //We divided the model in sections so it will be easy
-        do Screen.drawPixel(x + 8, y);                          //U can found the model on the documentation
-        do Screen.drawLine(x + 9, y, x + 9, y + 3);
-        do Screen.drawLine(x + 6, y + 3, x + 6, y + 8);
-        do Screen.drawLine(x + 10, y + 3, x + 10, y + 8);
-        do Screen.drawLine(x + 3, y + 7, x + 5, y + 7);
-        do Screen.drawLine(x + 11, y + 7, x + 13, y + 7);
-        do Screen.drawLine(x + 5, y + 8, x + 5, y + 9);
-        do Screen.drawLine(x + 11, y + 8, x + 11, y + 9);
-        do Screen.drawLine(x + 3, y + 8, x + 3, y + 11);
-        do Screen.drawLine(x, y + 9, x + 2, y + 9);
-        do Screen.drawLine(x + 13, y + 8, x + 13, y + 11);
-        do Screen.drawLine(x + 14, y + 9, x + 16, y + 9);
-        do Screen.drawLine(x + 2, y + 10, x + 2, y + 12);
-        do Screen.drawLine(x + 14, y + 10, x + 14, y + 12);
-        do Screen.drawLine(x + 8, y + 11, x + 8, y + 12);
-        do Screen.drawLine(x + 7, y + 12, x + 7, y + 13);
-        do Screen.drawLine(x + 9, y + 12, x + 9, y + 13);
-        do Screen.drawLine(x, y + 10, x, y + 20);
-        do Screen.drawLine(x + 16, y + 10, x + 16, y + 20);
-        do Screen.drawLine(x + 1, y + 20, x + 2, y + 20);
-        do Screen.drawLine(x + 14, y + 20, x + 15, y + 20);
-        do Screen.drawLine(x + 5, y + 18, x + 7, y + 18);
-        do Screen.drawLine(x + 9, y + 18, x + 11, y + 18);
-        do Screen.drawLine(x + 7, y + 18, x + 7, y + 22);
-        do Screen.drawLine(x + 9, y + 18, x + 9, y + 22);
-        do Screen.drawLine(x + 8, y + 21, x + 8, y + 22);
-        do Screen.drawPixel(x + 2, y + 19);
-        do Screen.drawPixel(x + 3, y + 18);
-        do Screen.drawPixel(x + 4, y + 17);
-        do Screen.drawPixel(x + 12, y + 17);
-        do Screen.drawPixel(x + 13, y + 18);
-        do Screen.drawPixel(x + 14, y + 19);
+    method void drawShip(){                                     //Method to draw the ship
+        var int s;
+        var int addr;
+        let s = y *32;
+        let addr = 16384 + s + (x/16);
+        do Memory.poke(addr, 960);
+        do Memory.poke(addr + 32, 576);
+        do Memory.poke(addr + 64, 576);
+        do Memory.poke(addr + 96, 1632);
+        do Memory.poke(addr + 128, 1056);
+        do Memory.poke(addr + 160, 1056);
+        do Memory.poke(addr + 192, 1056);
+        do Memory.poke(addr + 224, 15420);
+        do Memory.poke(addr + 256, 11316);
+        do Memory.poke(addr + 288, -5737);
+        do Memory.poke(addr + 320, -7225);
+        do Memory.poke(addr + 352, -15805);
+        do Memory.poke(addr + 384, -14317);
+        do Memory.poke(addr + 416, -27031);
+        do Memory.poke(addr + 448, -23995);
+        do Memory.poke(addr + 480, -15421);
         return;
     }
     method void eraseShip(){                                //Method to erase the ship
-        do Screen.setColor(false);                          //We assign white to the color so we can erase                     
-        do Screen.drawLine(x + 7, y, x + 7, y + 3);         //So we just copy and paste the code of drawShip
-        do Screen.drawPixel(x + 8, y);                      //and just change the color to white
-        do Screen.drawLine(x + 9, y, x + 9, y + 3);
-        do Screen.drawLine(x + 6, y + 3, x + 6, y + 8);
-        do Screen.drawLine(x + 10, y + 3, x + 10, y + 8);
-        do Screen.drawLine(x + 3, y + 7, x + 5, y + 7);
-        do Screen.drawLine(x + 11, y + 7, x + 13, y + 7);
-        do Screen.drawLine(x + 5, y + 8, x + 5, y + 9);
-        do Screen.drawLine(x + 11, y + 8, x + 11, y + 9);
-        do Screen.drawLine(x + 3, y + 8, x + 3, y + 11);
-        do Screen.drawLine(x, y + 9, x + 2, y + 9);
-        do Screen.drawLine(x + 13, y + 8, x + 13, y + 11);
-        do Screen.drawLine(x + 14, y + 9, x + 16, y + 9);
-        do Screen.drawLine(x + 2, y + 10, x + 2, y + 12);
-        do Screen.drawLine(x + 14, y + 10, x + 14, y + 12);
-        do Screen.drawLine(x + 8, y + 11, x + 8, y + 12);
-        do Screen.drawLine(x + 7, y + 12, x + 7, y + 13);
-        do Screen.drawLine(x + 9, y + 12, x + 9, y + 13);
-        do Screen.drawLine(x, y + 10, x, y + 20);
-        do Screen.drawLine(x + 16, y + 10, x + 16, y + 20);
-        do Screen.drawLine(x + 1, y + 20, x + 2, y + 20);
-        do Screen.drawLine(x + 14, y + 20, x + 15, y + 20);
-        do Screen.drawLine(x + 5, y + 18, x + 7, y + 18);
-        do Screen.drawLine(x + 9, y + 18, x + 11, y + 18);
-        do Screen.drawLine(x + 7, y + 18, x + 7, y + 22);
-        do Screen.drawLine(x + 9, y + 18, x + 9, y + 22);
-        do Screen.drawLine(x + 8, y + 21, x + 8, y + 22);
-        do Screen.drawPixel(x + 2, y + 19);
-        do Screen.drawPixel(x + 3, y + 18);
-        do Screen.drawPixel(x + 4, y + 17);
-        do Screen.drawPixel(x + 12, y + 17);
-        do Screen.drawPixel(x + 13, y + 18);
-        do Screen.drawPixel(x + 14, y + 19);
+        var int s;
+        var int addr;
+        let s = y *32;
+        let addr = 16384 + s + (x/16);
+        do Memory.poke(addr, 0);
+        do Memory.poke(addr + 32, 0);
+        do Memory.poke(addr + 64, 0);
+        do Memory.poke(addr + 96, 0);
+        do Memory.poke(addr + 128, 0);
+        do Memory.poke(addr + 160, 0);
+        do Memory.poke(addr + 192, 0);
+        do Memory.poke(addr + 224, 0);
+        do Memory.poke(addr + 256, 0);
+        do Memory.poke(addr + 288, 0);
+        do Memory.poke(addr + 320, 0);
+        do Memory.poke(addr + 352, 0);
+        do Memory.poke(addr + 384, 0);
+        do Memory.poke(addr + 416, 0);
+        do Memory.poke(addr + 448, 0);
+        do Memory.poke(addr + 480, 0);
         return;
     }
     method void shoot(){                                    //Method used for the shots of the ship TEMPORAL:Increase size method
