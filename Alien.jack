@@ -1,0 +1,38 @@
+class Alien{
+    constructor Alien new(){
+        do drawAlien();
+        return this;
+    }
+
+    method void dispose(){
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void drawAlien(){
+        var int s;
+        var int addr;
+        let s = y *32;
+        let addr = 16384 + s + (x/16);
+        do Memory.poke(addr, 0);
+        do Memory.poke(addr + 32, 0);
+        do Memory.poke(addr + 64, 0);
+        do Memory.poke(addr + 96, 0);
+        do Memory.poke(addr + 128, 2064);
+        do Memory.poke(addr + 160, 1056);
+        do Memory.poke(addr + 192, 4080);
+        do Memory.poke(addr + 224, 7128);
+        do Memory.poke(addr + 256, 16380);
+        do Memory.poke(addr + 288, 12276);
+        do Memory.poke(addr + 320, 10260);
+        do Memory.poke(addr + 352, 1632);
+        do Memory.poke(addr + 384, 0);
+        do Memory.poke(addr + 416, 0);
+        do Memory.poke(addr + 448, 0);
+        do Memory.poke(addr + 480, 0);
+    }
+
+    method void destroyAlien(){
+
+    }
+}
