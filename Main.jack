@@ -2,6 +2,7 @@ class Main{
     function void main(){
         var Game game;
         let game = Game.new();
+        do game.load();
         do game.run();
         do game.dispose();
         return;
