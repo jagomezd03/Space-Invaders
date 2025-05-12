@@ -1,5 +1,9 @@
 class Alien{
-    constructor Alien new(){
+    field int x, y, s, addr;
+    
+    constructor Alien new(int sX, int sY){
+        let x = sX;
+        let y = sY;
         do drawAlien();
         return this;
     }
@@ -10,8 +14,6 @@ class Alien{
     }
 
     method void drawAlien(){
-        var int s;
-        var int addr;
         let s = y *32;
         let addr = 16384 + s + (x/16);
         do Memory.poke(addr, 0);
@@ -30,9 +32,28 @@ class Alien{
         do Memory.poke(addr + 416, 0);
         do Memory.poke(addr + 448, 0);
         do Memory.poke(addr + 480, 0);
+        return;
     }
 
     method void destroyAlien(){
-
+        let s = y *32;
+        let addr = 16384 + s + (x/16);
+        do Memory.poke(addr, 0);
+        do Memory.poke(addr + 32, 0);
+        do Memory.poke(addr + 64, 0);
+        do Memory.poke(addr + 96, 0);
+        do Memory.poke(addr + 128, 0);
+        do Memory.poke(addr + 160, 0);
+        do Memory.poke(addr + 192, 0);
+        do Memory.poke(addr + 224, 0);
+        do Memory.poke(addr + 256, 0);
+        do Memory.poke(addr + 288, 0);
+        do Memory.poke(addr + 320, 0);
+        do Memory.poke(addr + 352, 0);
+        do Memory.poke(addr + 384, 0);
+        do Memory.poke(addr + 416, 0);
+        do Memory.poke(addr + 448, 0);
+        do Memory.poke(addr + 480, 0);
+        return;
     }
 }
