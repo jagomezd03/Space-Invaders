@@ -1,6 +1,5 @@
 class Ship{
-    field int x,y;
-    field int size;
+    field int x, y, s, addr, aux;
 
     constructor Ship new (int sX, int sY){       //Method to create the ship
         let x = sX;
@@ -8,14 +7,14 @@ class Ship{
         do drawShip();
         return this;
     }
+    
     method void dispose(){                                  //Base method to dispose memory
         do Memory.deAlloc(this);
         return;
     }
+
     method void drawShip(){                                     //Method to draw the ship
-        var int s;
-        var int addr;
-        let s = y *32;
+        let s = y * 32;
         let addr = 16384 + s + (x/16);
         do Memory.poke(addr, 960);
         do Memory.poke(addr + 32, 576);
@@ -36,9 +35,7 @@ class Ship{
         return;
     }
     method void eraseShip(){                                //Method to erase the ship
-        var int s;
-        var int addr;
-        let s = y *32;
+        let s = y * 32;
         let addr = 16384 + s + (x/16);
         do Memory.poke(addr, 0);
         do Memory.poke(addr + 32, 0);
@@ -58,44 +55,80 @@ class Ship{
         do Memory.poke(addr + 480, 0);
         return;
     }
+
     method void shoot(){                                    //Method used for the shots of the ship TEMPORAL:Increase size method
-        
+        do Sys.wait(5);
+        let s = y *32;
+        let addr = 16384 + s + (x/16) - 512;
+        do Memory.poke(addr, 0);
+        do Memory.poke(addr + 32, 0);
+        do Memory.poke(addr + 64, 128);
+        do Memory.poke(addr + 96, 448);
+        do Memory.poke(addr + 128, 448);
+        do Memory.poke(addr + 160, 448);
+        do Memory.poke(addr + 192, 448);
+        do Memory.poke(addr + 224, 448);
+        do Memory.poke(addr + 256, 448);
+        do Memory.poke(addr + 288, 448);
+        do Memory.poke(addr + 320, 448);
+        do Memory.poke(addr + 352, 448);
+        do Memory.poke(addr + 384, 448);
+        do Memory.poke(addr + 416, 128);
+        do Memory.poke(addr + 448, 0);
+        do Memory.poke(addr + 480, 0);
         return;
     }
+
+    // method void moveShipProjectiles(){
+    //     let aux = y-16;
+    //     while(aux>0){
+    //         do eraseShip();
+    //         let aux = aux - 1
+    //         do shoot();
+    //     }
+    //     return;
+    // }
+
     method void shield(){                                   //Shield for the ship method
-        if (size > 2){                                      //TEMPORAL: Decrease size
-            do eraseShip();                                 //First we erase
-            let size = size - 2;
-            do drawShip();                                  //Then we draw
-        }
+        // if (x){
+            
+        // }
         return;
     }
+
     method void moveUp(){                                   //Method used to managed input from the user using upArrow
-        if (y>207){
+        do Sys.wait(5);
+        if (y>188){
             do eraseShip();
-            let y = y - 2;
+            let y = y - 1;
             do drawShip();
         }
         return;
     }
+
     method void moveDown(){                                 //Method used to managed input from the user using downArrow
-        if (y<233){
+        do Sys.wait(5);
+        if (y<220){
             do eraseShip();
-            let y = y + 2;
+            let y = y + 1;
             do drawShip();
         }
         return;
     }
+
     method void moveLeft(){                                 //Method used to managed input from the user using leftArrow
-        if (x>1){
+        do Sys.wait(5);
+        if (x>111){
             do eraseShip();
             let x = x - 2;
             do drawShip();
         }
         return;
     }
+    
     method void moveRight(){                                //Method used to managed input from the user using rightArrow
-        if (x<494){
+        do Sys.wait(5);
+        if (x<497){
             do eraseShip();
             let x = x + 2;
             do drawShip();
