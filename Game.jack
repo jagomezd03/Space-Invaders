@@ -3,8 +3,7 @@ class Game{
     field int direction;    //Current direction is represented by 0=none, 1=up, 2=down, 3=left, 4=right
 
     constructor Game new() {
-        let square = Ship.new(100, 207);        //Initial position of the ship
-        let direction = 0;                      //Stationary direction as init
+        let square = Ship.new(143, 188);        //Initial position of the ship
         return this;
     }
 
@@ -19,9 +18,19 @@ class Game{
         if (direction = 2){ do square.moveDown(); }
         if (direction = 3){ do square.moveLeft(); }
         if (direction = 4){ do square.moveRight(); }
-
-        do Sys.wait(50);
         return;
+    }
+
+    method void load(){
+        do Output.moveCursor(1, 1);               //Max X=22, Max Y=63
+        do Output.printString("SPACE");       //On x has limit and that halts the program, but on y that doesnt happens
+        do Output.moveCursor(2, 2);
+        do Output.printString("INVADERS");
+        do Output.moveCursor(22,22);
+        do Output.printString("Made by: jagomezd03");
+        do Screen.drawRectangle(93, 236, 511, 238);
+        do Screen.drawRectangle(93, 0, 95, 238);   
+        return;                                   //it behaves like an overflow and goes to the 0,0 position
     }
 
     method void run(){                          //Principal method that allows us to run the program
@@ -30,9 +39,9 @@ class Game{
         let exit = false;
 
         while(~exit){                           //Loop that keeps on the game
-            while (key = 0){                    //Loop that makes the ship moves on stationary direction until a key is pressed
+            while (key = 0){                                //Loop to make the ship Stationary while no key is pressed
                 let key = Keyboard.keyPressed();
-                do moveShip();
+                do Sys.wait(5);
             }
             if (key = 81) { let exit = true; }              //Q Key for quitting the game
             if (key = 67) { do square.shield(); }           //C Key for shield
