@@ -3,7 +3,7 @@ class Main{
         var Game game;
         let game = Game.new();
         do game.load();
-        do game.run();
+        do game.run();                  //Method call to be translated to game.jack
         do game.dispose();
         return;
     }

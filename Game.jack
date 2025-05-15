@@ -1,23 +1,26 @@
 class Game{
-    field Ship square;
+    field Ship ship;
+    field Alien aliens;
     field int direction;    //Current direction is represented by 0=none, 1=up, 2=down, 3=left, 4=right
 
     constructor Game new() {
-        let square = Ship.new(143, 188);        //Initial position of the ship
+        let ship = Ship.new(304, 220);        //Initial position of the ship 497-111=386 386/2=193 193+111=304
+        let aliens = Alien.new(159, 16);
         return this;
     }
 
     method void dispose(){
-        do square.dispose();
+        do ship.dispose();
+        do aliens.dispose();
         do Memory.deAlloc();
         return;
     }
 
     method void moveShip(){                     //Method used for the directions of the sip received by input
-        if (direction = 1){ do square.moveUp(); }
-        if (direction = 2){ do square.moveDown(); }
-        if (direction = 3){ do square.moveLeft(); }
-        if (direction = 4){ do square.moveRight(); }
+        if (direction = 1){ do ship.moveUp(); }
+        if (direction = 2){ do ship.moveDown(); }
+        if (direction = 3){ do ship.moveLeft(); }
+        if (direction = 4){ do ship.moveRight(); }
         return;
     }
 
@@ -25,11 +28,47 @@ class Game{
         do Output.moveCursor(1, 1);               //Max X=22, Max Y=63
         do Output.printString("SPACE");       //On x has limit and that halts the program, but on y that doesnt happens
         do Output.moveCursor(2, 2);
-        do Output.printString("INVADERS");
+        do Output.printString("INVADERS");                      
         do Output.moveCursor(22,22);
-        do Output.printString("Made by: jagomezd03");
-        do Screen.drawRectangle(93, 236, 511, 238);
-        do Screen.drawRectangle(93, 0, 95, 238);   
+        do Output.printString("Made by: jagomezd03");           //Marca de agua
+        do Screen.drawRectangle(93, 236, 511, 238);             //Line Vertical
+        do Screen.drawRectangle(93, 0, 95, 238);                //Line Bottom
+        //Left Arrow
+        do Memory.poke(18400, 56);
+        do Memory.poke(18432, 28);
+        do Memory.poke(18464, 14);
+        do Memory.poke(18496, -1);
+        do Memory.poke(18528, -1);
+        do Memory.poke(18560, 14);
+        do Memory.poke(18592, 28);
+        do Memory.poke(18624, 56);
+        //Right Arrow
+        do Memory.poke(18403, 7168);
+        do Memory.poke(18435, 14336);
+        do Memory.poke(18463, 28672);
+        do Memory.poke(18499, -1);
+        do Memory.poke(18531, -1);
+        do Memory.poke(18563, 28672);
+        do Memory.poke(18595, 14336);
+        do Memory.poke(18627, 7168);
+        //Up Arrow
+        do Memory.poke(18050, 384);
+        do Memory.poke(18082, 960);
+        do Memory.poke(18114, 2016);
+        do Memory.poke(18146, 3504);
+        do Memory.poke(18178, 2448);                            //Correct Position for up and down
+        do Memory.poke(18210, 384);
+        do Memory.poke(18242, 384);
+        do Memory.poke(18274, 384);
+        //Down Arrow
+        do Memory.poke(18402, 384);
+        do Memory.poke(18433, 384);
+        do Memory.poke(18465, 384);
+        do Memory.poke(18497, 2448);
+        do Memory.poke(18529, 3504);
+        do Memory.poke(18561, 2016);
+        do Memory.poke(18593, 960);
+        do Memory.poke(18625, 384);
         return;                                   //it behaves like an overflow and goes to the 0,0 position
     }
 
@@ -44,18 +83,24 @@ class Game{
                 do Sys.wait(5);
             }
             if (key = 81) { let exit = true; }              //Q Key for quitting the game
-            if (key = 67) { do square.shield(); }           //C Key for shield
-            if (key = 66) { do square.shoot(); }            //B Key for shoot
-            if (key = 131) { let direction = 1; }           //Up Arrow for direction
-            if (key = 133) { let direction = 2; }           //Left Arrow for direction
-            if (key = 130) { let direction = 3; }           //Right Arrow for direction
-            if (key = 132) { let direction = 4; }           //Down Arrow for direction
+            if (key = 67) { do ship.shield(); }           //C Key for shield
+            if (key = 66) { do ship.shoot(); }            //B Key for shoot
+            if (key = 131) { do ship.moveUp(); }           //Up Arrow for direction
+            if (key = 133) { do ship.moveLeft(); }           //Left Arrow for direction
+            if (key = 130) { do ship.moveRight(); }           //Right Arrow for direction
+            if (key = 132) { do ship.moveDown(); }           //Down Arrow for direction
 
             while (~(key = 0)){                             //Loop that makes monitoring about keeping the key pressed
                 let key = Keyboard.keyPressed();
                 do moveShip();
             }
+
+            while(){                                          //Here we will handle all the colissions
+
+            }
         }
+
+        do dispose();
         return;
     }
 }
