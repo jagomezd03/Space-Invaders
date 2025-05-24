@@ -1,0 +1,67 @@
+class Bullet {
+    field int x, y;
+    field int xVelocity, yVelocity;
+    field boolean active;
+    field int width, height;
+
+    constructor Bullet new(int startX, int startY, int velX, int velY) {
+        let x = startX;
+        let y = startY;
+        let xVelocity = velX;
+        let yVelocity = velY;
+        let active = true; //Bullet is active when created
+        let width = 2;
+        let height = 6;
+        return this;
+    }
+
+    method void dispose() {
+        do Memory.deAlloc(this);
+        return;
+    }
+
+    method void draw() {
+        if (active) {
+            do Screen.setColor(true);               //Set color
+            do Screen.drawRectangle(x, y, x + width - 1, y + height - 1);
+        }
+        return;
+    }
+
+    method void erase() {
+        do Screen.setColor(false);                  //Set color
+        do Screen.drawRectangle(x, y, x + width - 1, y + height - 1);
+        return;
+    }
+
+    method void move() {
+        if (active) {
+            do erase();                         //Erase the bullet
+            let x = x + xVelocity;              //Update position
+            let y = y + yVelocity;
+
+            //Check if off-screen (and deactivate)
+            if ((y < 0) | (y > 255) | (x < 0) | (x > 511)) {
+                let active = false;             //Mark as inactive
+            } else {
+                do draw();                      //Draw the bullet with his position updated
+            }
+        }
+        return;
+    }
+
+    method boolean isActive() {
+        return active;
+    }
+
+    method void destroy() {
+        do erase();
+        let active = false;
+        return;
+    }
+
+    method int getX() { return x; }
+    method int getY() { return y; }
+    method int getWidth() { return width; }
+    method int getHeight() { return height; }
+}

@@ -1,11 +1,20 @@
 class Alien{
-    field int x, y, s, addr, nA;
+    field int x, y, s, addr;
+    field int width, height;
+    field boolean active;
+    field int xDirection;
+    field Game parentGame;
+    field int moveCounter;
     
-    constructor Alien new(int sX, int sY){
+    constructor Alien new(int sX, int sY, Game aGame){
         let x = sX;
         let y = sY;
-        let nA = 18;
-        do drawAlien();
+        let active = true;
+        let xDirection = 1;
+        let moveCounter = 0;
+        let width = 16;
+        let height = 16;
+        let parentGame = aGame;
         return this;
     }
 
@@ -14,11 +23,31 @@ class Alien{
         return;
     }
 
-    method void drawAliens(){
-        //Refactor the method, this must not be like the method drawShip, because we need more than one alien
+    method void draw() {
+        if (active) {
+            let s = y * 32;
+            let addr = 16384 + s + (x/16);
+            do Memory.poke(addr, 0);
+            do Memory.poke(addr + 32, 0);
+            do Memory.poke(addr + 64, 0);
+            do Memory.poke(addr + 96, 0);
+            do Memory.poke(addr + 128, 2064);
+            do Memory.poke(addr + 160, 1056);
+            do Memory.poke(addr + 192, 4080);
+            do Memory.poke(addr + 224, 7128);
+            do Memory.poke(addr + 256, 16380);
+            do Memory.poke(addr + 288, 12276);
+            do Memory.poke(addr + 320, 10260);
+            do Memory.poke(addr + 352, 1632);
+            do Memory.poke(addr + 384, 0);
+            do Memory.poke(addr + 416, 0);
+            do Memory.poke(addr + 448, 0);
+            do Memory.poke(addr + 480, 0);
+        }
+        return;
     }
 
-    method void destroyAlien(){
+    method void erase(){
         let s = y *32;
         let addr = 16384 + s + (x/16);
         do Memory.poke(addr, 0);
@@ -39,4 +68,53 @@ class Alien{
         do Memory.poke(addr + 480, 0);
         return;
     }
+
+    method void move() {
+        if (~active) { return; }                //Only move if active
+        do erase();                             //Erase current position
+        //Selected movement pattern: move horizontally, then drop down and reverse direction
+        let x = x + xDirection;
+        let moveCounter = moveCounter + 1;
+
+        if ((xDirection = 1) & (x > 450)) {     // Hit right boundary
+            let xDirection = -1;                // Change to left
+            let y = y + 10;                     // Move down
+            let moveCounter = 0;                // Reset counter
+        } else {
+            if ((xDirection = -1) & (x < 100)) { // Hit left boundary
+                let xDirection = 1;             // Change to right
+                let y = y + 10;                 // Move down
+                let moveCounter = 0;            // Reset counter
+            }
+        }
+        do draw();                              // Draw at new position
+        return;
+    }
+
+    method void shoot() {
+        //Aliens should fire downwards, so yVelocity is positive.
+        //Bullet starts from the bottom-center of the alien.
+        var int bulletStartX, bulletStartY;
+        let bulletStartX = x + (width / 2) - 1;     // Center of alien, bullet width 2
+        let bulletStartY = y + height;              // Bottom of alien
+
+        //Creating a new bullet and pass it to the Game for handling
+        do parentGame.addAlienBullet(Bullet.new(bulletStartX, bulletStartY, 0, 5)); //Downward velocity
+        return;
+    }
+
+    method void takeHit() {
+        do erase();                                 //Erase the alien
+        let active = false;                         // Mark as inactive (destroyed)
+        return;
+    }
+
+    method boolean isActive(){
+        return active;
+    }
+
+    method int getX() { return x; }
+    method int getY() { return y; }
+    method int getWidth() { return width; }
+    method int getHeight() { return height; }
 }

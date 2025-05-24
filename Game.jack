@@ -1,39 +1,110 @@
-class Game{
+class Game {
     field Ship ship;
-    field Alien aliens;
-    field int direction;    //Current direction is represented by 0=none, 1=up, 2=down, 3=left, 4=right
+    field Array alienFleet;
+    field Array playerBullets;
+    field Array alienBullets;
+    field int direction;
+    field int gameset;
+    field boolean collision; // Corrected spelling to 'collision' for consistency, not critical for compiler
+
+    //Balance constants - 'static' fields do not need 'field' keyword
+    static int MAX_PLAYER_BULLETS;
+    static int MAX_ALIENS;
+    static int MAX_ALIEN_BULLETS;
 
     constructor Game new() {
-        let ship = Ship.new(304, 220);        //Initial position of the ship 497-111=386 386/2=193 193+111=304
-        let aliens = Alien.new(159, 16);
+        let MAX_PLAYER_BULLETS = 5;
+        let MAX_ALIENS = 300;
+        let MAX_ALIEN_BULLETS = 10;
+
+        // CRITICAL: Ensure 'this' is passed to Ship.new constructor
+        let ship = Ship.new(304, 220, this);
+
+        let playerBullets = Array.new(MAX_PLAYER_BULLETS);
+        let alienFleet = Array.new(MAX_ALIENS);
+        let alienBullets = Array.new(MAX_ALIEN_BULLETS);
+
+        let direction = 0;
+        let gameset = 0;
+        let collision = false; // Initialized here
+        do initAliens();
         return this;
     }
 
-    method void dispose(){
+    method void initAliens() {
+        var int i, row, col, xPos, yPos; // All local vars declared on one line
+        let i = 0;
+        let row = 0;
+        let yPos = 16; //Starting Y position for the first row of aliens
+
+        while (row < 5) { //5 rows of aliens
+            let col = 0;
+            let xPos = 159; //Starting X position for the first alien in a row
+            while (col < 6) { //6 aliens per row
+                if (i < MAX_ALIENS) { //Balance of the game
+                    let alienFleet[i] = Alien.new(xPos, yPos, this);
+                    do alienFleet[i].draw();
+                    let i = i + 1;
+                }
+                let xPos = xPos + 40; //Spacing between aliens
+                let col = col + 1;
+            }
+            let yPos = yPos + 30; //Spacing between rows
+            let row = row + 1;
+        }
+        return;
+    }
+
+    method void dispose() {
+        var int i; // Local var for loop counter
+
         do ship.dispose();
-        do aliens.dispose();
-        do Memory.deAlloc();
+
+        // Aliens dispose
+        let i = 0;
+        while (i < MAX_ALIENS) { // Corrected: use MAX_ALIENS constant
+            if (~(alienFleet[i] = null)) {
+                do alienFleet[i].dispose();
+            }
+            let i = i + 1;
+        }
+        do Memory.deAlloc(alienFleet);
+
+        // Player bullet dispose
+        let i = 0;
+        while (i < MAX_PLAYER_BULLETS) { // Corrected: use MAX_PLAYER_BULLETS constant
+            if (~(playerBullets[i] = null)) {
+                do playerBullets[i].dispose();
+            }
+            let i = i + 1;
+        }
+        do Memory.deAlloc(playerBullets);
+
+        // Alien bullets dispose
+        let i = 0;
+        while (i < MAX_ALIEN_BULLETS) { // Corrected: use MAX_ALIEN_BULLETS constant
+            if (~(alienBullets[i] = null)) {
+                do alienBullets[i].dispose();
+            }
+            let i = i + 1;
+        }
+        do Memory.deAlloc(alienBullets);
+        do Memory.deAlloc(this);
         return;
     }
 
-    method void moveShip(){                     //Method used for the directions of the sip received by input
-        if (direction = 1){ do ship.moveUp(); }
-        if (direction = 2){ do ship.moveDown(); }
-        if (direction = 3){ do ship.moveLeft(); }
-        if (direction = 4){ do ship.moveRight(); }
-        return;
-    }
-
-    method void load(){
-        do Output.moveCursor(1, 1);               //Max X=22, Max Y=63
-        do Output.printString("SPACE");       //On x has limit and that halts the program, but on y that doesnt happens
+    method void load() {
+        do Output.moveCursor(1, 1);
+        do Output.printString("SPACE");
         do Output.moveCursor(2, 2);
-        do Output.printString("INVADERS");                      
-        do Output.moveCursor(22,22);
-        do Output.printString("Made by: jagomezd03");           //Marca de agua
-        do Screen.drawRectangle(93, 236, 511, 238);             //Line Vertical
-        do Screen.drawRectangle(93, 0, 95, 238);                //Line Bottom
-        //Left Arrow
+        do Output.printString("INVADERS");
+        do Output.moveCursor(21, 0);
+        do Output.printString("Made by:");
+        do Output.moveCursor(22, 0);
+        do Output.printString("jagomezd03");
+        do Screen.drawRectangle(93, 236, 511, 238);
+        do Screen.drawRectangle(93, 0, 95, 238);
+        // Left Arrow
         do Memory.poke(18400, 56);
         do Memory.poke(18432, 28);
         do Memory.poke(18464, 14);
@@ -42,7 +113,7 @@ class Game{
         do Memory.poke(18560, 14);
         do Memory.poke(18592, 28);
         do Memory.poke(18624, 56);
-        //Right Arrow
+        // Right Arrow
         do Memory.poke(18403, 7168);
         do Memory.poke(18435, 14336);
         do Memory.poke(18463, 28672);
@@ -51,16 +122,16 @@ class Game{
         do Memory.poke(18563, 28672);
         do Memory.poke(18595, 14336);
         do Memory.poke(18627, 7168);
-        //Up Arrow
+        // Up Arrow
         do Memory.poke(18050, 384);
         do Memory.poke(18082, 960);
         do Memory.poke(18114, 2016);
         do Memory.poke(18146, 3504);
-        do Memory.poke(18178, 2448);                            //Correct Position for up and down
+        do Memory.poke(18178, 2448);
         do Memory.poke(18210, 384);
         do Memory.poke(18242, 384);
         do Memory.poke(18274, 384);
-        //Down Arrow
+        // Down Arrow
         do Memory.poke(18402, 384);
         do Memory.poke(18433, 384);
         do Memory.poke(18465, 384);
@@ -69,38 +140,198 @@ class Game{
         do Memory.poke(18561, 2016);
         do Memory.poke(18593, 960);
         do Memory.poke(18625, 384);
-        return;                                   //it behaves like an overflow and goes to the 0,0 position
+
+        do Output.moveCursor(10, 30);
+        do Output.printString("PRESS ANY KEY TO");
+        do Output.moveCursor(11, 36);
+        do Output.printString("PLAY");
+        return;
     }
 
-    method void run(){                          //Principal method that allows us to run the program
+    method void run() {
         var char key;
-        var boolean exit;                       //This will helps us to quit the game if the user wants to
+        var boolean exit;
+        var int i, j;
+        var Bullet currentBullet; // Ensure this ends with a semicolon
+        var Bullet alienCurrentBullet;
+        var Alien currentAlien;
+
         let exit = false;
+        do ship.drawShip();
 
-        while(~exit){                           //Loop that keeps on the game
-            while (key = 0){                                //Loop to make the ship Stationary while no key is pressed
-                let key = Keyboard.keyPressed();
-                do Sys.wait(5);
+        let i = 0;
+        while (i < MAX_ALIENS) {
+            if (~(alienFleet[i] = null)) {
+                do alienFleet[i].draw();
             }
-            if (key = 81) { let exit = true; }              //Q Key for quitting the game
-            if (key = 67) { do ship.shield(); }           //C Key for shield
-            if (key = 66) { do ship.shoot(); }            //B Key for shoot
-            if (key = 131) { do ship.moveUp(); }           //Up Arrow for direction
-            if (key = 133) { do ship.moveLeft(); }           //Left Arrow for direction
-            if (key = 130) { do ship.moveRight(); }           //Right Arrow for direction
-            if (key = 132) { do ship.moveDown(); }           //Down Arrow for direction
-
-            while (~(key = 0)){                             //Loop that makes monitoring about keeping the key pressed
-                let key = Keyboard.keyPressed();
-                do moveShip();
-            }
-
-            while(){                                          //Here we will handle all the colissions
-
-            }
+            let i = i + 1;
         }
 
+        while (~exit) {
+            let key = Keyboard.keyPressed();
+
+            if (key = 131) { do ship.moveUp(); }
+            if (key = 133) { do ship.moveDown(); }
+            if (key = 130) { do ship.moveLeft(); }
+            if (key = 132) { do ship.moveRight(); }
+
+            if (key = 81) { let exit = true; }
+            if (key = 67) { do ship.shield(); }
+            if (key = 66) { do ship.shoot(); }
+
+            // 1. Move Player Bullets
+            let i = 0;
+            while (i < MAX_PLAYER_BULLETS) {
+                let currentBullet = playerBullets[i];
+                if (~(currentBullet = null)) {
+                    // Removed 'do' from if condition: if (do currentBullet.isActive())
+                    if (currentBullet.isActive()) {
+                        do currentBullet.move();
+                    } else {
+                        do currentBullet.dispose();
+                        let playerBullets[i] = null;
+                    }
+                }
+                let i = i + 1;
+            }
+
+            // 2. Move Aliens and handle alien shooting
+            let i = 0;
+            while (i < MAX_ALIENS) {
+                let currentAlien = alienFleet[i];
+                if (~(currentAlien = null)) {
+                    // Removed 'do' from if condition: if (do currentAlien.isActive())
+                    if (currentAlien.isActive()) {
+                        do currentAlien.move();
+                        // You need to include Math.jack for Math.rand() if you use it
+                        // if (Math.rand() > 10000) { do currentAlien.shoot(); }
+                    } else {
+                        do currentAlien.dispose();
+                        let alienFleet[i] = null;
+                    }
+                }
+                let i = i + 1;
+            }
+
+            // 3. Move Alien Bullets
+            let i = 0;
+            while (i < MAX_ALIEN_BULLETS) {
+                let alienCurrentBullet = alienBullets[i];
+                if (~(alienCurrentBullet = null)) {
+                    // Removed 'do' from if condition: if (do alienCurrentBullet.isActive())
+                    if (alienCurrentBullet.isActive()) {
+                        do alienCurrentBullet.move();
+                    } else {
+                        do alienCurrentBullet.dispose();
+                        let alienBullets[i] = null;
+                    }
+                }
+                let i = i + 1;
+            }
+
+            // 4. Collision Detection: Player Bullets vs. Aliens
+            let i = 0;
+            while (i < MAX_PLAYER_BULLETS) {
+                let currentBullet = playerBullets[i];
+                if (~(currentBullet = null)) {
+                    // Removed 'do' from if condition: if (do currentBullet.isActive())
+                    if (currentBullet.isActive()) {
+                        let j = 0;
+                        while (j < MAX_ALIENS) {
+                            let currentAlien = alienFleet[j];
+                            if (~(currentAlien = null)) {
+                                // Removed 'do' from if condition: if (do currentAlien.isActive())
+                                if (currentAlien.isActive()) {
+                                    // Removed 'do' from if condition: if (do Game.checkCollision(...))
+                                    if (Game.checkCollision(currentBullet.getX(), currentBullet.getY(), currentBullet.getWidth(), currentBullet.getHeight(),
+                                                               currentAlien.getX(), currentAlien.getY(), currentAlien.getWidth(), currentAlien.getHeight())) {
+                                        do currentBullet.destroy();
+                                        do currentAlien.takeHit();
+                                        let j = MAX_ALIENS; // Exit inner loop after collision
+                                    }
+                                }
+                            }
+                            let j = j + 1;
+                        }
+                    }
+                }
+                let i = i + 1;
+            }
+
+            // 5. Collision Detection: Alien Bullets vs. Ship
+            let i = 0;
+            while (i < MAX_ALIEN_BULLETS) {
+                let alienCurrentBullet = alienBullets[i];
+                if (~(alienCurrentBullet = null)) {
+                    // Removed 'do' from if condition: if (do alienCurrentBullet.isActive())
+                    if (alienCurrentBullet.isActive()) {
+                        // Removed 'do' from if condition: if (do Game.checkCollision(...))
+                        if (Game.checkCollision(alienCurrentBullet.getX(), alienCurrentBullet.getY(), alienCurrentBullet.getWidth(), alienCurrentBullet.getHeight(),
+                                                   ship.getX(), ship.getY(), ship.getWidth(), ship.getHeight())) {
+                            do alienCurrentBullet.destroy();
+                            do ship.takeDamage();
+                        }
+                    }
+                }
+                let i = i + 1;
+            }
+
+            do Sys.wait(50);
+        }
         do dispose();
         return;
+    }
+
+    method void play() {
+        var char key;
+        let key = 0; // Initialize key to avoid "uninitialized variable" issues in while loop condition
+        while (key = 0) {
+            let key = Keyboard.keyPressed();
+        }
+
+        do Screen.setColor(false);
+        do Screen.drawRectangle(0, 0, 511, 255); //Clear the entire screen
+        do Screen.setColor(true);
+        do run();
+        return;
+    }
+
+    method void addPlayerBullet(Bullet b) {
+        var int i;
+        let i = 0;
+        while (i < MAX_PLAYER_BULLETS) {
+            if (playerBullets[i] = null) {
+                let playerBullets[i] = b;
+                do b.draw();
+                let i = MAX_PLAYER_BULLETS;
+            }
+            let i = i + 1;
+        }
+        return;
+    }
+
+    method void addAlienBullet(Bullet b) {
+        var int i;
+        let i = 0;
+        while (i < MAX_ALIEN_BULLETS) {
+            if (alienBullets[i] = null) {
+                let alienBullets[i] = b;
+                do b.draw();
+                let i = MAX_ALIEN_BULLETS;
+            }
+            let i = i + 1;
+        }
+        return;
+    }
+
+    static boolean checkCollision(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2) {
+        // Checking overlap on the X axis
+        if ((x1 < (x2 + w2)) & ((x1 + w1) > x2)) {
+            // Checking overlap on the Y axis
+            if ((y1 < (y2 + h2)) & ((y1 + h1) > y2)) {
+                return true; // Collision detected
+            }
+        }
+        return false; // No collision
     }
 }

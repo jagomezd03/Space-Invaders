@@ -1,10 +1,14 @@
 class Ship{
     field int x, y, s, addr, aux;
+    field Game parentGame;          //Variable to manage bullet
+    field int width, height;
 
-    constructor Ship new (int sX, int sY){       //Method to create the ship
+    constructor Ship new (int sX, int sY, Game aGame){       //Method to create the ship
         let x = sX;
         let y = sY;
-        do drawShip();
+        let width = 16;
+        let height = 16;
+        let parentGame = aGame;
         return this;
     }
     
@@ -56,83 +60,75 @@ class Ship{
         return;
     }
 
-    method void shoot(){                                    //Method used for the shots of the ship TEMPORAL:Increase size method
-        do Sys.wait(5);
-        let s = y *32;
-        let addr = 16384 + s + (x/16) - 512;
-        do Memory.poke(addr, 0);
-        do Memory.poke(addr + 32, 0);
-        do Memory.poke(addr + 64, 128);
-        do Memory.poke(addr + 96, 448);
-        do Memory.poke(addr + 128, 448);
-        do Memory.poke(addr + 160, 448);
-        do Memory.poke(addr + 192, 448);
-        do Memory.poke(addr + 224, 448);
-        do Memory.poke(addr + 256, 448);
-        do Memory.poke(addr + 288, 448);
-        do Memory.poke(addr + 320, 448);
-        do Memory.poke(addr + 352, 448);
-        do Memory.poke(addr + 384, 448);
-        do Memory.poke(addr + 416, 128);
-        do Memory.poke(addr + 448, 0);
-        do Memory.poke(addr + 480, 0);
-        return;
-    }
-
-    // method void moveShipProjectiles(){
-    //     let aux = y-16;
-    //     while(aux>0){
-    //         do eraseShip();
-    //         let aux = aux - 1
-    //         do shoot();
-    //     }
-    //     return;
-    // }
-
-    method void shield(){                                   //Shield for the ship method
-        // if (x){
-            
-        // }
-        return;
-    }
-
     method void moveUp(){                                   //Method used to managed input from the user using upArrow
-        do Sys.wait(5);
         if (y>188){
             do eraseShip();
-            let y = y - 1;
+            let y = y - 4;
             do drawShip();
         }
         return;
     }
 
     method void moveDown(){                                 //Method used to managed input from the user using downArrow
-        do Sys.wait(5);
         if (y<220){
             do eraseShip();
-            let y = y + 1;
+            let y = y + 4;
             do drawShip();
         }
         return;
     }
 
     method void moveLeft(){                                 //Method used to managed input from the user using leftArrow
-        do Sys.wait(5);
         if (x>111){
             do eraseShip();
-            let x = x - 2;
+            let x = x - 16;
             do drawShip();
         }
         return;
     }
     
     method void moveRight(){                                //Method used to managed input from the user using rightArrow
-        do Sys.wait(5);
         if (x<497){
             do eraseShip();
-            let x = x + 2;
+            let x = x + 16;
             do drawShip();
         }
+        return;
+    }
+
+    method void shoot(){
+        //Ship's width is 16. Bullet's width (from Bullet.jack) is 2.
+        //So, x + (ship.width / 2) - (bullet.width / 2) = x + (16/2) - (2/2) = x + 8 - 1 = x + 7
+        var int bulletStartX, bulletStartY;
+        let bulletStartX = x + 7;
+        let bulletStartY = y; //Starting at the top of the ship
+        //The bullet moves upwards, so yVelocity is negative (e.g., -5 pixels per frame)
+        do parentGame.addPlayerBullet(Bullet.new(bulletStartX, bulletStartY, 0, -5));
+        return;
+    }
+
+    method int getX(){
+        return x;
+    }
+
+    method int getY(){
+        return y;
+    }
+
+    method int getWidth(){
+        return width;
+    }
+
+    method int getHeight(){
+        return height;
+    }
+
+    method void takeDamage(){
+        do eraseShip();
+        return;
+    }
+
+    method void shield(){
         return;
     }
 }
